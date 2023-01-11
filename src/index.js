@@ -1,25 +1,11 @@
 module.exports = function toReadable(number) {
-    let result;
-    if (((number / 100) | 0) != 0) {
-        console.log(oneDigitNumberToWord((number / 100) | 0));
-        console.log((number / 100) | 0);
-        result =
-            oneDigitNumberToWord((number / 100) | 0) +
-                " hundred" +
-                twoDigitNumberToWord(number % 100) !=
-                "zero" && " " + twoDigitNumberToWord(number % 100);
-    } else {
-        result = twoDigitNumberToWord(number % 100);
-    }
-    // const result =
-    //     oneDigitNumberToWord((number / 100) | 0) != "zero"
-    //         ? oneDigitNumberToWord((number / 100) | 0) +
-    //               " hundred" +
-    //               twoDigitNumberToWord(number % 100) !=
-    //               "zero" && " " + twoDigitNumberToWord(number % 100)
-    //         : twoDigitNumberToWord(number % 100);
-
-    return result;
+    return ((number / 100) | 0) != 0
+        ? twoDigitNumberToWord(number % 100) != "zero"
+            ? oneDigitNumberToWord((number / 100) | 0) +
+              " hundred " +
+              twoDigitNumberToWord(number % 100)
+            : oneDigitNumberToWord((number / 100) | 0) + " hundred"
+        : twoDigitNumberToWord(number % 100);
 };
 
 function oneDigitNumberToWord(number) {
@@ -65,37 +51,36 @@ function twoDigitNumberToWord(number) {
             case 18:
                 return "eighteen";
             default:
-                return oneDigitNumberToWord((number / 10) | 0) + "teen";
+                return oneDigitNumberToWord(number % 10) + "teen";
         }
-    } else if (number >= 20) {
-        switch (number) {
-            case ((number / 10) | 0) == 2:
-                return (
-                    "twenty" + oneDigitNumberToWord(number % 10) != "zero" &&
-                    " " + oneDigitNumberToWord(number % 10)
-                );
-            case ((number / 10) | 0) == 3:
-                return (
-                    "thirty" + oneDigitNumberToWord(number % 10) != "zero" &&
-                    " " + oneDigitNumberToWord(number % 10)
-                );
-            case ((number / 10) | 0) == 5:
-                return (
-                    "fifty" + oneDigitNumberToWord(number % 10) != "zero" &&
-                    " " + oneDigitNumberToWord(number % 10)
-                );
-            case ((number / 10) | 0) == 8:
-                return (
-                    "eighty" + oneDigitNumberToWord(number % 10) != "zero" &&
-                    " " + oneDigitNumberToWord(number % 10)
-                );
+    } else {
+        const firstDigit = (number / 10) | 0;
+        const lastDigit = oneDigitNumberToWord(number % 10);
+        switch (firstDigit) {
+            case 2:
+                return lastDigit != "zero"
+                    ? "twenty" + " " + lastDigit
+                    : (result = "twenty");
+            case 3:
+                return lastDigit != "zero"
+                    ? "thirty" + " " + lastDigit
+                    : "thirty";
+            case 4:
+                return lastDigit != "zero"
+                    ? "forty" + " " + lastDigit
+                    : "forty";
+            case 5:
+                return lastDigit != "zero"
+                    ? "fifty" + " " + lastDigit
+                    : "fifty";
+            case 8:
+                return lastDigit != "zero"
+                    ? "eighty" + " " + lastDigit
+                    : "eighty";
             default:
-                return (
-                    oneDigitNumberToWord((number / 10) | 0) +
-                        "ty" +
-                        oneDigitNumberToWord(number % 10) !=
-                        "zero" && " " + oneDigitNumberToWord(number % 10)
-                );
+                return lastDigit != "zero"
+                    ? oneDigitNumberToWord(firstDigit) + "ty " + lastDigit
+                    : oneDigitNumberToWord(firstDigit) + "ty";
         }
     }
 }
